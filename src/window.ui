@@ -7,6 +7,12 @@
     <property name="title">LeTrace</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header_bar">
+        <child type="start">
+          <object class="GtkButton" id="open_button">
+            <property name="label">Open File</property>
+            <property name="action-name">win.open</property>
+          </object>
+        </child>
         <child type="end">
           <object class="GtkMenuButton">
             <property name="icon-name">open-menu-symbolic</property>
