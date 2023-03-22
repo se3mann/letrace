@@ -8,6 +8,7 @@ class LetraceWindow(Gtk.ApplicationWindow):
     label = Gtk.Template.Child()
     open_button = Gtk.Template.Child()
 
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 

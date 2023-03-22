@@ -3,7 +3,7 @@
   <requires lib="gtk" version="4.0"/>
   <template class="LetraceWindow" parent="GtkApplicationWindow">
     <property name="default-width">600</property>
-    <property name="default-height">300</property>
+    <property name="default-height">400</property>
     <property name="title">LeTrace</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header_bar">
@@ -22,6 +22,50 @@
       </object>
     </child>
     <child>
+      <object class="GtkGrid">
+        <property name="column-homogeneous">true</property>
+        <property name="row-homogeneous">true</property>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="hscrollbar-policy">automatic</property>
+            <property name="vscrollbar-policy">automatic</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label">
+            <property name="label">Hello, World!</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">0</property>
+            </layout>
+            <style>
+              <class name="title-1"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <layout>
+              <property name="column">0</property>
+              <property name="row">1</property>
+              <property name="column-span">2</property>
+            </layout>
+            <child type="end">
+              <object class="GtkButton" id="start_button">
+                <property name="label">Start</property>
+                <property name="action-name">win.start</property>
+              </object>
+        </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <!--
+    <child>
       <object class="GtkLabel" id="label">
         <property name="label">Hello, World!</property>
         <style>
@@ -29,6 +73,7 @@
         </style>
       </object>
     </child>
+    -->
   </template>
   <menu id="primary_menu">
     <section>
