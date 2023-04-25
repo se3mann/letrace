@@ -4,31 +4,30 @@ import gi
 
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
-from gi.repository import Gtk, Adw
+from gi.repository import Gtk, Gio
+from window import MainWindow
 
-class MainWindow(Gtk.ApplicationWindow):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
-        self.builder = Gtk.Builder(self)
-        self.builder.add_from_file("ui/window.ui")
-        window = self.builder.get_object("window")
-        self.set_child(window)
-
-        title = window.get_property("title")
-        self.set_title(title)
-
-class MyApp(Adw.Application):
+class LeTraceApp(Gtk.Application):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.connect('activate', self.on_activate)
+        self.create_action('quit', self.quit, ['<primary>q'])
 
-    def on_activate(self, app):
-        self.win = MainWindow(application=app)
-        self.win.present()
+    def do_activate(self):
+        win = self.props.active_window
+        if not win:
+            win = MainWindow(application=self)
+        win.present()
+
+    def create_action(self, name, callback, shortcuts=None):
+        action = Gio.SimpleAction.new(name, None)
+        action.connect("activate", callback)
+        self.add_action(action)
+        if shortcuts:
+            self.set_accels_for_action(f"app.{name}", shortcuts)
 
 
 if __name__ == "__main__":
-    app = MyApp()
+    app = LeTraceApp()
     exit_status = app.run(sys.argv)
     sys.exit(exit_status)
