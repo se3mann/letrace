@@ -26,9 +26,7 @@
         <child>
           <object class="GtkBox" id="sidebar_container">
             <child>
-              <object class="GtkTextView" id="text_view">
-                <property name="editable">false</property>
-                <property name="monospace">true</property>
+              <object class="TraceSideBar" id="trace_sidebar">
               </object>
             </child>
           </object>
