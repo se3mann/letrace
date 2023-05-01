@@ -1,22 +1,20 @@
-
 from gi.repository import Gtk, Gio
+from sidebar import TraceSideBar
 
-@Gtk.Template(resource_path='/org/gnome/Example/window.ui')
-class LetraceWindow(Gtk.ApplicationWindow):
-    __gtype_name__ = 'LetraceWindow'
 
-    label = Gtk.Template.Child()
+@Gtk.Template(filename="window.ui")
+class MainWindow(Gtk.ApplicationWindow):
+    __gtype_name__ = 'MainWindow'
+
+    paned = Gtk.Template.Child()
+    start_button = Gtk.Template.Child()
     open_button = Gtk.Template.Child()
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-        open_action = Gio.SimpleAction(name="open")
-        open_action.connect("activate", self.open_file_dialog)
-        self.add_action(open_action)
-
-    def open_file_dialog(self, action, parameter):
+    @Gtk.Template.Callback()
+    def on_open_button_clicked(self, *args):
         # Create a new file selection dialog, using the "open" mode
         # and keep a reference to it
         self._native = Gtk.FileChooserNative(
@@ -27,6 +25,9 @@ class LetraceWindow(Gtk.ApplicationWindow):
             cancel_label="_Cancel",
         )
 
+        root_folder = Gio.File.new_for_path("/usr/bin")
+        self._native.set_current_folder(root_folder)
+
         # Create a filter for binary executable files
         executable_filter = Gtk.FileFilter()
         executable_filter.set_name("Binary executable files")
@@ -35,9 +36,6 @@ class LetraceWindow(Gtk.ApplicationWindow):
         # Add the filter to the file chooser dialog
         self._native.add_filter(executable_filter)
 
-        # Connect the "response" signal of the file selection dialog;
-        # this signal is emitted when the user selects a file, or when
-        # they cancel the operation
         self._native.connect("response", self.on_open_response)
         # Present the dialog to the user
         self._native.show()
@@ -48,10 +46,4 @@ class LetraceWindow(Gtk.ApplicationWindow):
             # ... retrieve the location from the dialog and open it
             file = dialog.get_file()
             self.label.set_label(f"Selected file: {file}")
-        # Release the reference on the file selection dialog now that we
-        # do not need it any more
         self._native = None
-
-    def trace_file(self, file):
-        # we want to get the bpftrace list this file's functions
-        pass
