@@ -23,7 +23,7 @@
         <child>
             <object class="GtkStack" id="sidebar_stack">
                 <child>
-                    <object class="GtkStackPage">
+                    <object class="GtkStackPage" id="user_stackpage">
                         <property name="name">File</property>
                         <property name="title">File</property>
                         <property name="child">
@@ -34,7 +34,7 @@
                     </object>
                 </child>
                 <child>
-                    <object class="GtkStackPage">
+                    <object class="GtkStackPage" id="kernel_stackpage">
                         <property name="name">Kernel</property>
                         <property name="title">Kernel</property>
                         <property name="child">

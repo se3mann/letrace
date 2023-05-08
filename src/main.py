@@ -14,7 +14,7 @@ class LeTraceApp(Gtk.Application):
         super().__init__(**kwargs)
         self.create_action('quit', self.quit, ['<primary>q'])
 
-        #load kernel methods at app startup
+        #load kernel methods at app startup at different thread
         self.load_linux_kernels()
 
     def do_activate(self):

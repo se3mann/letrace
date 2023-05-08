@@ -1,16 +1,42 @@
+from gi.repository import Gtk, GObject, Gio
 from terminal import Terminal
 
 
+class Str(GObject.GObject):
+    value: str
+
+    def __init__(self, value):
+        GObject.GObject.__init__(self)
+        self._value = value
+
+    def get_value(self):
+        return self._value
+
+    def set_value(self, value):
+        self._value = value
+        self.emit('changed')
+
+
 class TraceUtils:
-    def __init__(self, *args, **kwargs):
+    kernel_methods = Gio.ListStore.new(Str)
+    user_methods = Gio.ListStore.new(Str)
+    test_list = Gio.ListStore.new(Str)
+
+    def __init__(self):
         pass
 
-    @staticmethod
-    def get_kernel_methods():
-        kernel_methods = []
+    @classmethod
+    def get_kernel_methods(cls):
         cmd = "sudo bpftrace -l | grep -E '^kprobe' | cut -d ':' -f 2"
         output = Terminal.run_simple_command(cmd)
         for line in output.splitlines():
-            kernel_methods.append(line.strip())
+            cls.kernel_methods.append(Str(line.strip()))
 
-        return kernel_methods
+    """
+    @classmethod
+    def get_user_methods(cls):
+        cmd = "sudo bpftrace -l | grep -E '^uprobe' | cut -d ':' -f 2"
+        output = Terminal.run_simple_command(cmd)
+        for line in output.splitlines():
+            cls.kernel_methods.append(Str(line.strip()))
+    """
