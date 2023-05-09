@@ -11,6 +11,8 @@
                 <child>
                     <object class="GtkSearchEntry" id="search_entry">
                         <property name="placeholder-text">Search</property>
+                        <signal name="search_changed" handler="on_search_changed" swapped="no"/>
+                        <signal name="activate" handler="on_search_activate" swapped="no"/>
                     </object>
                 </child>
             </object>
@@ -27,8 +29,14 @@
                         <property name="name">File</property>
                         <property name="title">File</property>
                         <property name="child">
-                            <object class="GtkListView" id="methods_from_file">
-                                <property name="enable-rubberband">False</property>
+                            <object class="GtkScrolledWindow" id="user_scrolled_window">
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
+                                <property name="child">
+                                    <object class="GtkListView" id="methods_from_user">
+                                        <property name="enable-rubberband">False</property>
+                                    </object>
+                                </property>
                             </object>
                         </property>
                     </object>
@@ -38,8 +46,14 @@
                         <property name="name">Kernel</property>
                         <property name="title">Kernel</property>
                         <property name="child">
-                            <object class="GtkListView" id="methods_from_kernel">
-                                <property name="enable-rubberband">False</property>
+                            <object class="GtkScrolledWindow" id="kernel_scrolled_window">
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
+                                <property name="child">
+                                    <object class="GtkListView" id="methods_from_kernel">
+                                        <property name="enable-rubberband">False</property>
+                                    </object>
+                                </property>
                             </object>
                         </property>
                     </object>
