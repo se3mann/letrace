@@ -1,6 +1,6 @@
 from gi.repository import Gtk
 from trace_utils import TraceUtils, Str
-
+import time
 
 @Gtk.Template(filename="sidebar.ui")
 class TraceSideBar(Gtk.Box):
@@ -20,7 +20,7 @@ class TraceSideBar(Gtk.Box):
     single_select_kernel = Gtk.SingleSelection()
     single_select_user = Gtk.SingleSelection()
     filter_model = Gtk.FilterListModel()
-    str_filter = Gtk.StringFilter()
+    search_filter = Gtk.CustomFilter()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -29,7 +29,7 @@ class TraceSideBar(Gtk.Box):
         # scrolling settings
         self.kernel_scrolled_window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self.user_scrolled_window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-
+        time.sleep(5)
         self.set_sidebar()
         print("Sidebar init")
         TraceUtils.test_list.append(Str("test1 ez egy nagyon hosszú szöveg ám, tényleg"))
@@ -45,12 +45,10 @@ class TraceSideBar(Gtk.Box):
     
     def set_sidebar(self):
         # for searching
-        self.filter_model.set_model(TraceUtils.test_list)
+        self.filter_model.set_model(TraceUtils.kernel_methods)
         # Filter
-        self.str_filter.set_search(self.search_entry.get_text())
-        self.str_filter.set_ignore_case(True)
-        self.str_filter.set_match_mode(Gtk.StringFilterMatchMode.SUBSTRING)
-        self.filter_model.set_filter(self.str_filter)
+        self.search_filter.set_filter_func(self.filter_func, self.filter_model)
+        self.filter_model.set_filter(self.search_filter)
         
         self.single_select_kernel.set_model(self.filter_model)
         
@@ -58,7 +56,7 @@ class TraceSideBar(Gtk.Box):
         factory.connect("setup", lambda _fact, item:
             item.set_child(Gtk.Label(halign=Gtk.Align.START)))
         factory.connect("bind", lambda _fact, item:
-            item.get_child().set_label(item.get_item()._value))
+            item.get_child().set_label(item.get_item().value))
         
         self.methods_from_kernel.set_model(self.single_select_kernel)
         self.methods_from_kernel.set_factory(factory)
@@ -71,34 +69,21 @@ class TraceSideBar(Gtk.Box):
     def on_search_changed(self, *args):
         active_child = self.get_active_stack()
         if active_child == "Kernel":
-            print("kernel stackpage")
-            self.str_filter.set_search(self.search_entry.get_text())
-            
-            
+            self.search_filter.set_filter_func(self.filter_func, self.filter_model)
         elif active_child == "File":
             print("user stackpage")
         else:
             print("else")
             pass
 
+    def filter_func(self, method, *args):
+        """Custom filter for method search."""
+        query = self.search_entry.get_text()
+        if not query:
+            return True
+        query = query.casefold()
 
-    def setup_single_select_listview(self, data):
-        # for searching
-        filter_model = Gtk.FilterListModel(model=TraceUtils.test_list)
-        # Filter
-        str_filter = Gtk.StringFilter()
-        str_filter.set_search(self.search_entry.get_text())
-        str_filter.set_ignore_case(True)
-        str_filter.set_match_mode(Gtk.StringFilterMatchMode.SUBSTRING)
-        filter_model.set_filter(str_filter)
-        
-        self.single_select_kernel.set_model(filter_model)
-        # factory for ListView widget, it is needed to display the list
-        factory = Gtk.SignalListItemFactory()
-        factory.connect("setup", lambda _fact, item:
-            item.set_child(Gtk.Label(halign=Gtk.Align.START)))
-        factory.connect("bind", lambda _fact, item:
-            item.get_child().set_label(item.get_item()._value))
+        if query in method.value.casefold():
+            return True
 
-        self.methods_from_kernel.set_model(self.single_select_kernel)
-        self.methods_from_kernel.set_factory(factory)
+        return False

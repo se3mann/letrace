@@ -7,13 +7,13 @@ class Str(GObject.GObject):
 
     def __init__(self, value):
         GObject.GObject.__init__(self)
-        self._value = value
+        self.value = value
 
     def get_value(self):
-        return self._value
+        return self.value
 
     def set_value(self, value):
-        self._value = value
+        self.value = value
         self.emit('changed')
 
 
@@ -40,3 +40,4 @@ class TraceUtils:
         for line in output.splitlines():
             cls.kernel_methods.append(Str(line.strip()))
     """
+
