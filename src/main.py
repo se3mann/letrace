@@ -5,8 +5,6 @@ gi.require_version('Adw', '1')
 from gi.repository import Gtk, Gio
 
 from window import MainWindow
-from trace_utils import TraceUtils
-
 
 class LeTraceApp(Gtk.Application):
     def __init__(self, **kwargs):
