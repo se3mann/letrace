@@ -18,12 +18,12 @@ class TraceSideBar(Gtk.Box):
     methods_from_kernel = Gtk.Template.Child()
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(* args, **kwargs)
 
-        # class members for searching
+        # object members for kernel methods
         self.single_select_kernel = Gtk.SingleSelection()
-        self.single_select_user = Gtk.SingleSelection()
         self.filter_model_kernel = Gtk.FilterListModel()
+        self.single_select_user = Gtk.SingleSelection()
         self.filter_model_user = Gtk.FilterListModel()
         self.search_filter = Gtk.CustomFilter()
 
@@ -32,14 +32,6 @@ class TraceSideBar(Gtk.Box):
         self.user_scrolled_window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 
         self.set_kernel_list_on_thread()
-        self.set_user_list_view()
-        """
-        TraceUtils.test_list.append(Str("test1 ez egy nagyon hosszú szöveg ám, tényleg"))
-        TraceUtils.test_list.append(Str("test2"))
-        TraceUtils.test_list.append(Str("test3"))
-        for i in range(50):
-            TraceUtils.test_list.append(Str(f"test{i}"))
-        """
 
     @Gtk.Template.Callback()
     def on_search_changed(self, *args):
@@ -72,7 +64,7 @@ class TraceSideBar(Gtk.Box):
 
     def set_user_list_view(self):
         # setup for searching in listview
-        self.filter_model_user.set_model(TraceUtils.test_list)
+        self.filter_model_user.set_model(TraceUtils.user_methods)
         self.search_filter.set_filter_func(self.filter_func, self.filter_model_user)
         self.filter_model_user.set_filter(self.search_filter)
         self.single_select_user.set_model(self.filter_model_user)
@@ -105,3 +97,13 @@ class TraceSideBar(Gtk.Box):
 
         load_kernel_thread = threading.Thread(target=setup)
         load_kernel_thread.start()
+
+    def set_user_list_on_thread(self, file_path):
+        def setup():
+            TraceUtils.get_user_methods(file_path)
+            self.set_user_list_view()
+
+        load_user_thread = threading.Thread(target=setup)
+        load_user_thread.start()
+
+

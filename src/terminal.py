@@ -7,5 +7,6 @@ class Terminal:
     @staticmethod
     def run_simple_command(cmd):
         with Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE) as p:
-            return p.stdout.read().decode('utf-8')
+            return p.stdout.read().decode('utf-8'), p.stderr.read().decode('utf-8')
+
 

@@ -1,7 +1,6 @@
 from gi.repository import Gtk, Gio
 from sidebar import TraceSideBar
 
-
 @Gtk.Template(filename="window.ui")
 class MainWindow(Gtk.ApplicationWindow):
     __gtype_name__ = 'MainWindow'
@@ -9,6 +8,7 @@ class MainWindow(Gtk.ApplicationWindow):
     paned = Gtk.Template.Child()
     start_button = Gtk.Template.Child()
     open_button = Gtk.Template.Child()
+    trace_sidebar = Gtk.Template.Child()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -24,9 +24,6 @@ class MainWindow(Gtk.ApplicationWindow):
             accept_label="_Open",
             cancel_label="_Cancel",
         )
-
-        root_folder = Gio.File.new_for_path("/usr/bin")
-        self._native.set_current_folder(root_folder)
 
         # Create a filter for binary executable files
         executable_filter = Gtk.FileFilter()
@@ -45,5 +42,7 @@ class MainWindow(Gtk.ApplicationWindow):
         if response == Gtk.ResponseType.ACCEPT:
             # ... retrieve the location from the dialog and open it
             file = dialog.get_file()
-            self.label.set_label(f"Selected file: {file}")
+            file_path = file.get_path()
+            print(file_path)
+            self.trace_sidebar.set_user_list_on_thread(file_path)
         self._native = None

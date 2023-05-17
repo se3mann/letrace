@@ -28,16 +28,27 @@ class TraceUtils:
     @classmethod
     def get_kernel_methods(cls):
         cmd = "sudo bpftrace -l | grep -E '^kprobe' | cut -d ':' -f 2"
-        output = Terminal.run_simple_command(cmd)
-        for line in output.splitlines():
-            cls.kernel_methods.append(Str(line.strip()))
+        output, error = Terminal.run_simple_command(cmd)
+        if error:
+            print(error)
+        else:
+            for line in output.splitlines():
+                cls.kernel_methods.append(Str(line.strip()))
 
-    """
     @classmethod
-    def get_user_methods(cls):
-        cmd = "sudo bpftrace -l | grep -E '^uprobe' | cut -d ':' -f 2"
-        output = Terminal.run_simple_command(cmd)
-        for line in output.splitlines():
-            cls.kernel_methods.append(Str(line.strip()))
-    """
+    def get_user_methods(cls, file):
+        cmd = f"objdump -t {file}"
+        output, error = Terminal.run_simple_command(cmd)
+        if error:
+            print(error)
+        else:
+            lines = output.splitlines()
+            for i, line in enumerate(lines):
+                if "SYMBOL TABLE:" in line and "no" in lines[i+1].split()[0]:
+                    print("No symbols found")
+                    break
+                if ".text" in line:
+                    cls.user_methods.append(Str(line.split()[-1]))
+
+
 
