@@ -33,12 +33,23 @@ class TraceSideBar(Gtk.Box):
 
         self.set_kernel_list_on_thread()
         self.set_user_list_view()
-
+        """
         TraceUtils.test_list.append(Str("test1 ez egy nagyon hosszú szöveg ám, tényleg"))
         TraceUtils.test_list.append(Str("test2"))
         TraceUtils.test_list.append(Str("test3"))
         for i in range(50):
             TraceUtils.test_list.append(Str(f"test{i}"))
+        """
+
+    @Gtk.Template.Callback()
+    def on_search_changed(self, *args):
+        active_child = self.get_active_stack()
+        if active_child == "Kernel":
+            self.search_filter.set_filter_func(self.filter_func, self.filter_model_kernel)
+        elif active_child == "File":
+            self.search_filter.set_filter_func(self.filter_func, self.filter_model_user)
+        else:
+            pass
 
     def get_active_stack(self):
         return self.sidebar_stack.get_visible_child_name()
@@ -74,16 +85,6 @@ class TraceSideBar(Gtk.Box):
 
         self.methods_from_user.set_model(self.single_select_user)
         self.methods_from_user.set_factory(factory)
-
-    @Gtk.Template.Callback()
-    def on_search_changed(self, *args):
-        active_child = self.get_active_stack()
-        if active_child == "Kernel":
-            self.search_filter.set_filter_func(self.filter_func, self.filter_model_kernel)
-        elif active_child == "File":
-            self.search_filter.set_filter_func(self.filter_func, self.filter_model_user)
-        else:
-            pass
 
     def filter_func(self, method, *args):
         # Custom filter for method search.
