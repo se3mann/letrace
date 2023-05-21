@@ -1,10 +1,14 @@
+#! /usr/bin/env python3
 import sys
+import faulthandler
 import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 from gi.repository import Gtk, Gio
 
 from window import MainWindow
+
+faulthandler.enable()
 
 class LeTraceApp(Gtk.Application):
     def __init__(self, **kwargs):

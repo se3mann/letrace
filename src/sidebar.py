@@ -3,7 +3,7 @@ from trace_utils import TraceUtils, Str
 import threading
 
 
-@Gtk.Template(filename="sidebar.ui")
+@Gtk.Template(filename="ui/sidebar.ui")
 class TraceSideBar(Gtk.Box):
     __gtype_name__ = 'TraceSideBar'
 

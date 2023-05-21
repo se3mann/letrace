@@ -1,7 +1,7 @@
 from gi.repository import Gtk, Gio
 from sidebar import TraceSideBar
 
-@Gtk.Template(filename="window.ui")
+@Gtk.Template(filename="ui/window.ui")
 class MainWindow(Gtk.ApplicationWindow):
     __gtype_name__ = 'MainWindow'
 
@@ -46,3 +46,7 @@ class MainWindow(Gtk.ApplicationWindow):
             print(file_path)
             self.trace_sidebar.set_user_list_on_thread(file_path)
         self._native = None
+
+    @Gtk.Template.Callback()
+    def on_start_button_clicked(self, *args):
+        print("Start button clicked")
