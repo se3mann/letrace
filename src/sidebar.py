@@ -32,6 +32,7 @@ class TraceSideBar(Gtk.Box):
         self.user_scrolled_window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 
         self.set_kernel_list_on_thread()
+        print(TraceUtils.get_start_trace_command("do_sys_open", "/home/bin/asd.out"))
 
     @Gtk.Template.Callback()
     def on_search_changed(self, *args):
@@ -90,6 +91,7 @@ class TraceSideBar(Gtk.Box):
 
         return False
 
+    # Do it on thread to avoid blocking the UI
     def set_kernel_list_on_thread(self):
         def setup():
             TraceUtils.get_kernel_methods()
@@ -98,6 +100,7 @@ class TraceSideBar(Gtk.Box):
         load_kernel_thread = threading.Thread(target=setup)
         load_kernel_thread.start()
 
+    # Do it on thread to avoid blocking the UI
     def set_user_list_on_thread(self, file_path):
         def setup():
             TraceUtils.get_user_methods(file_path)
@@ -105,5 +108,3 @@ class TraceSideBar(Gtk.Box):
 
         load_user_thread = threading.Thread(target=setup)
         load_user_thread.start()
-
-

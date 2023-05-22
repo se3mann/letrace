@@ -1,5 +1,7 @@
 from gi.repository import Gtk, Gio
 from sidebar import TraceSideBar
+from trace_controller import TraceController
+
 
 @Gtk.Template(filename="ui/window.ui")
 class MainWindow(Gtk.ApplicationWindow):
@@ -50,3 +52,5 @@ class MainWindow(Gtk.ApplicationWindow):
     @Gtk.Template.Callback()
     def on_start_button_clicked(self, *args):
         print("Start button clicked")
+        trace_controller = TraceController()
+        trace_controller.start_trace("icmp_out_count")
