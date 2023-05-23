@@ -3,6 +3,8 @@ import multiprocessing
 from multiprocessing.queues import Queue
 from queue import Empty
 from threading import Thread
+import os
+import signal
 
 from trace_process import TraceProcess
 from trace_utils import TraceUtils
@@ -28,11 +30,12 @@ class TraceController:
             if(trace_process.get_output() is not None):
                 print(trace_process.get_output())
         if trace_process.is_alive():
+            os.killpg(os.getpgid(trace_process.pid), signal.SIGTERM)
             trace_process.terminate()
             trace_process.join()
 
-        def stop_trace(self):
-            self._thread_enabled = False
+    def stop_trace(self):
+        self._thread_enabled = False
 
 
 

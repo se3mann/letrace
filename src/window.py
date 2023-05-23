@@ -10,10 +10,12 @@ class MainWindow(Gtk.ApplicationWindow):
     paned = Gtk.Template.Child()
     start_button = Gtk.Template.Child()
     open_button = Gtk.Template.Child()
+    stop_button = Gtk.Template.Child()
     trace_sidebar = Gtk.Template.Child()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.trace_controller = TraceController()
 
     @Gtk.Template.Callback()
     def on_open_button_clicked(self, *args):
@@ -51,6 +53,9 @@ class MainWindow(Gtk.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def on_start_button_clicked(self, *args):
-        print("Start button clicked")
-        trace_controller = TraceController()
-        trace_controller.start_trace("icmp_out_count")
+        self.trace_controller.start_trace("icmp_out_count")
+
+    @Gtk.Template.Callback()
+    def on_stop_button_clicked(self, *args):
+        self.trace_controller.stop_trace()
+
