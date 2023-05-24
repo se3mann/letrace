@@ -1,24 +1,33 @@
-import multiprocessing
+import os
+import signal
+from threading import Thread
 from contextlib import redirect_stdout
-from queue import Empty
-from subprocess import Popen, PIPE
+from queue import Empty, Queue
+from subprocess import Popen
 
 from trace_utils import TraceUtils
 
 
-class TraceProcess(multiprocessing.Process):
+class TraceProcess(Thread):
     def __init__(self, function, file = None):
         super().__init__()
-        self.queue = multiprocessing.Queue()
+        self.queue = Queue()
         self.cmd = TraceUtils.get_start_trace_command(function, file)
-        self.process = Popen(self.cmd, shell=True, start_new_session=True)
+        self.daemon = True
+        self.process = None
 
     def run(self):
         with redirect_stdout(self.queue):
-            self.process.wait()
+            self.process = Popen(self.cmd, shell=False)
 
     def get_output(self):
         try:
             return self.queue.get_nowait()
         except Empty:
             return None
+
+    def stop_cmd(self):
+        self.process.kill()
+
+    def print_line(self):
+        print(self.queue.get_nowait())

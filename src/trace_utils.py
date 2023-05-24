@@ -1,4 +1,6 @@
 from gi.repository import GObject, Gio
+import shlex
+
 from terminal import Terminal
 
 
@@ -62,6 +64,8 @@ class TraceUtils:
     @classmethod
     def get_start_trace_command(cls, function, file=None):
         if file is None:
-            return f"sudo bpftrace -e 'kprobe:{function} {{ printf(\"%s\\n\", kstack()); }}'"
+            command = f"sudo bpftrace -e 'kprobe:{function} {{ printf(\"%s\\n\", kstack()); }}'"
+            cmd = shlex.split(command)
+            return cmd
         else:
             return f"sudo bpftrace -e 'uprobe:{file}:{function} {{ printf(\"%s\\n\", ustack()); }}'"

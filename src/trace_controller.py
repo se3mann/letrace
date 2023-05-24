@@ -22,17 +22,17 @@ class TraceController:
         trace_process.start()
         monitor_thread.start()
 
-    def monitor_trace(self, trace_process):
+    def monitor_trace(self, trace_thread):
         output = []
         while self._thread_enabled:
-            if not trace_process.is_alive():
+            if not trace_thread.is_alive():
                 break
-            if(trace_process.get_output() is not None):
-                print(trace_process.get_output())
-        if trace_process.is_alive():
-            os.killpg(os.getpgid(trace_process.pid), signal.SIGTERM)
-            trace_process.terminate()
-            trace_process.join()
+            if(trace_thread.get_output() is not None):
+                print(trace_thread.get_output())
+        if trace_thread.is_alive():
+            trace_thread.stop_cmd()
+            trace_thread.terminate()
+            trace_thread.join()
 
     def stop_trace(self):
         self._thread_enabled = False
