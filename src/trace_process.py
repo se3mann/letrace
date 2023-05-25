@@ -1,6 +1,6 @@
 import os
 import signal
-from threading import Thread
+from threading import Thread, Event
 from contextlib import redirect_stdout
 from queue import Empty, Queue
 from subprocess import Popen
@@ -26,8 +26,10 @@ class TraceProcess(Thread):
         except Empty:
             return None
 
-    def stop_cmd(self):
-        self.process.kill()
-
     def print_line(self):
         print(self.queue.get_nowait())
+
+    def stop_trace(self):
+        if self.process is not None:
+            os.kill(self.process.pid, signal.SIGINT)
+            self.process = None

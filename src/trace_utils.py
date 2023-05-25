@@ -68,4 +68,6 @@ class TraceUtils:
             cmd = shlex.split(command)
             return cmd
         else:
-            return f"sudo bpftrace -e 'uprobe:{file}:{function} {{ printf(\"%s\\n\", ustack()); }}'"
+            command = f"sudo bpftrace -e 'uprobe:{file}:{function} {{ printf(\"%s\\n\", ustack()); }}'"
+            cmd = shlex.split(command)
+            return cmd

@@ -21,7 +21,7 @@ class MainWindow(Gtk.ApplicationWindow):
     def on_open_button_clicked(self, *args):
         # Create a new file selection dialog, using the "open" mode
         # and keep a reference to it
-        self._native = Gtk.FileChooserNative(
+        self.native = Gtk.FileChooserNative(
             title="Open File",
             transient_for=self,
             action=Gtk.FileChooserAction.OPEN,
@@ -35,11 +35,11 @@ class MainWindow(Gtk.ApplicationWindow):
         executable_filter.add_mime_type("application/x-executable")
 
         # Add the filter to the file chooser dialog
-        self._native.add_filter(executable_filter)
+        self.native.add_filter(executable_filter)
 
-        self._native.connect("response", self.on_open_response)
+        self.native.connect("response", self.on_open_response)
         # Present the dialog to the user
-        self._native.show()
+        self.native.show()
 
     def on_open_response(self, dialog, response):
         # If the user selected a file...
@@ -53,7 +53,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
     @Gtk.Template.Callback()
     def on_start_button_clicked(self, *args):
-        self.trace_controller.start_trace("icmp_out_count")
+        self.trace_controller.start_trace("func1", "/home/tekno/Projects/letrace/test/a.out")
 
     @Gtk.Template.Callback()
     def on_stop_button_clicked(self, *args):
