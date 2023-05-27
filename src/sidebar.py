@@ -100,11 +100,21 @@ class TraceSideBar(Gtk.Box):
         load_kernel_thread = threading.Thread(target=setup)
         load_kernel_thread.start()
 
-    # Do it on thread to avoid blocking the UI
-    def set_user_list_on_thread(self, file_path):
-        def setup():
-            TraceUtils.get_user_methods(file_path)
-            self.set_user_list_view()
+    def set_user_methods(self, file_path):
+        TraceUtils.get_user_methods(file_path)
+        self.set_user_list_view()
 
-        load_user_thread = threading.Thread(target=setup)
-        load_user_thread.start()
+    def get_selected_method(self):
+        active_child = self.get_active_stack()
+        if active_child == "Kernel" and self.single_select_kernel.get_selected_item() is not None:
+            return self.single_select_kernel.get_selected_item().get_value()
+        elif active_child == "File" and self.single_select_user.get_selected_item() is not None:
+            return self.single_select_user.get_selected_item().get_value()
+        else:
+            return None
+
+    def get_selected_file(self):
+        if self.get_active_stack() == "File":
+            return TraceUtils.file
+        else:
+            return None

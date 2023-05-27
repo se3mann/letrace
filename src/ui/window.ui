@@ -19,12 +19,6 @@
             <signal name="clicked" handler="on_start_button_clicked" swapped="no" />
           </object>
         </child>
-        <child type="start">
-          <object class="GtkButton" id="stop_button">
-            <property name="label">Stop</property>
-            <signal name="clicked" handler="on_stop_button_clicked" swapped="no" />
-          </object>
-        </child>
       </object>
     </child>
     <child>

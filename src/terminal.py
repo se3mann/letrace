@@ -1,5 +1,5 @@
 from subprocess import Popen, PIPE
-import os
+import shlex
 
 class Terminal:
     def __init__(self, *args, **kwargs):

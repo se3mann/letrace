@@ -1,7 +1,7 @@
-from gi.repository import Gtk, Gio
-from sidebar import TraceSideBar
+from gi.repository import Gtk
 from trace_controller import TraceController
-
+from sidebar import TraceSideBar
+from trace_utils import TraceUtils
 
 @Gtk.Template(filename="ui/window.ui")
 class MainWindow(Gtk.ApplicationWindow):
@@ -10,12 +10,12 @@ class MainWindow(Gtk.ApplicationWindow):
     paned = Gtk.Template.Child()
     start_button = Gtk.Template.Child()
     open_button = Gtk.Template.Child()
-    stop_button = Gtk.Template.Child()
     trace_sidebar = Gtk.Template.Child()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.trace_controller = TraceController()
+        self.trace_running = False
 
     @Gtk.Template.Callback()
     def on_open_button_clicked(self, *args):
@@ -47,15 +47,20 @@ class MainWindow(Gtk.ApplicationWindow):
             # ... retrieve the location from the dialog and open it
             file = dialog.get_file()
             file_path = file.get_path()
-            print(file_path)
-            self.trace_sidebar.set_user_list_on_thread(file_path)
+            self.trace_sidebar.set_user_methods(file_path)
         self._native = None
 
     @Gtk.Template.Callback()
     def on_start_button_clicked(self, *args):
-        self.trace_controller.start_trace("func1", "/home/tekno/Projects/letrace/test/a.out")
-
-    @Gtk.Template.Callback()
-    def on_stop_button_clicked(self, *args):
-        self.trace_controller.stop_trace()
-
+        if not self.trace_running:
+            selected_method = self.trace_sidebar.get_selected_method()
+            selected_file = self.trace_sidebar.get_selected_file()
+            if selected_method is None:
+                return
+            self.trace_controller.start_trace(selected_method, selected_file)
+            self.trace_running = True
+            self.start_button.set_label("Stop")
+        else:
+            self.trace_controller.stop_trace()
+            self.trace_running = False
+            self.start_button.set_label("Start")
