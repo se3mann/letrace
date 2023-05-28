@@ -1,7 +1,8 @@
 from gi.repository import Gtk
-from trace_controller import TraceController
+from trace_controller import TraceController, TraceControllerFactory
 from sidebar import TraceSideBar
 from trace_utils import TraceUtils
+from graph import GraphArea
 
 @Gtk.Template(filename="ui/window.ui")
 class MainWindow(Gtk.ApplicationWindow):
@@ -14,7 +15,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.trace_controller = TraceController()
+        self.trace_controller = TraceControllerFactory.get_instance()
         self.trace_running = False
 
     @Gtk.Template.Callback()

@@ -71,7 +71,7 @@ class TraceUtils:
     @classmethod
     def get_start_trace_command(cls, function, file=None):
         if file is None:
-            command = f"pkexec bpftrace -e 'kprobe:{function} {{ printf(\"%s\\n\", kstack()); }}'"
+            command = f"pkexec bpftrace -e \'kprobe:{function} {{ printf(\"%s\\n\", kstack()); }}\'"
             cmd = shlex.split(command)
             return cmd
         else:

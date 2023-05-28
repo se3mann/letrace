@@ -32,7 +32,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkDrawingArea" id="drawing_area">
+          <object class="GraphArea" id="graph_box">
             <property name="hexpand">true</property>
             <property name="vexpand">true</property>
           </object>
