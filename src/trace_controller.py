@@ -14,6 +14,7 @@ class TraceController:
 
     # start tracing process
     def start_trace(self, function, file=None):
+        self.call_graph.clear()
         self.thread_enabled = True
         self.trace_thread = TraceThread(function, file)
         self.monitor_thread = MonitorThread(self.trace_thread, self.call_graph)

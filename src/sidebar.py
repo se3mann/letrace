@@ -31,7 +31,9 @@ class TraceSideBar(Gtk.Box):
         self.kernel_scrolled_window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self.user_scrolled_window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 
-        self.set_kernel_list_on_thread()
+        # self.set_kernel_list_on_thread()
+        TraceUtils.get_kernel_methods()
+        self.set_kernel_list_view()
 
     @Gtk.Template.Callback()
     def on_search_changed(self, *args):

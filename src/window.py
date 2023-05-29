@@ -12,6 +12,7 @@ class MainWindow(Gtk.ApplicationWindow):
     start_button = Gtk.Template.Child()
     open_button = Gtk.Template.Child()
     trace_sidebar = Gtk.Template.Child()
+    graph_box = Gtk.Template.Child()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -65,3 +66,4 @@ class MainWindow(Gtk.ApplicationWindow):
             self.trace_controller.stop_trace()
             self.trace_running = False
             self.start_button.set_label("Start")
+            self.graph_box.draw_graph()

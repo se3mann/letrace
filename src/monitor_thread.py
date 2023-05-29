@@ -26,9 +26,9 @@ class MonitorThread(Thread):
                     # sometimes it creates an empty list
                     # because of double new line
                     if len(stack_lines) > 0:
-                        print("--------------------")
-                        self.callgraph.parse_from_list(stack_lines)
-                        self.callgraph.print_edges()
+                        # print("--------------------")
+                        self.callgraph.parse(stack_lines)
+                        # self.callgraph.print_edges()
                         stack_lines.clear()
                 else:
                     stack_lines.append(line)
