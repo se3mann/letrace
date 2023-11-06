@@ -4,19 +4,21 @@ import networkx as nx
 
 class CallGraph:
     def __init__(self):
+        self.nx_graph = nx.DiGraph()
+        """
         self.graph = gt.Graph(directed=True)
         self.labels = self.graph.new_vertex_property("string")
         self.weights = self.graph.new_edge_property("int")
         self.count = self.graph.new_vertex_property("int")
         self.traced = self.graph.new_vertex_property("bool")
-        self.nx_graph = nx.DiGraph()
+        self.nx_graph = nx.DiGraph()"""
 
     def parse_from_list(self, stack_list):
         prev_vertex = None
         for node in stack_list:
             vertex = None
             # breaks when the vertex is found
-            for v in self.graph.vertices():
+            for v in self.nx_graph.nodes:
                 if self.labels[v] == node:
                     vertex = v
                     break
@@ -63,7 +65,7 @@ class CallGraph:
     def parse(self, stack_list):
         traced_vertex = stack_list[0]
         self.parse_from_list(stack_list)
-        for v in self.graph.vertices():
+        for v in self.nx_graph.nodes():
             if self.labels[v] == traced_vertex:
                 self.traced[v] = True
                 break
