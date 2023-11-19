@@ -1,6 +1,7 @@
 import networkx as nx
 import re
 
+
 def delete_offset(line):
     pattern = re.compile(r'(\w+)\+\d+')
     match = pattern.match(line)
@@ -10,6 +11,7 @@ def delete_offset(line):
         return function_name
     else:
         return line
+
 
 class CallGraph:
     def __init__(self):
@@ -25,7 +27,7 @@ class CallGraph:
             node = node
 
             if node_is_new:
-                self.nx_graph.add_node(node, count=1, traced=False)
+                self.nx_graph.add_node(node, count=1, traced=False, label=node)
             else:
                 self.nx_graph.nodes[node]['count'] += 1
 

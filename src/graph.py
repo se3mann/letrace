@@ -31,33 +31,11 @@ class GraphArea(Gtk.Box):
         self.toolbar = NavigationToolbar(self.canvas)
         self.append(self.toolbar)
 
-        # Connect the button_press_event signal to the callback function for panning
-        # self.canvas.mpl_connect('button_press_event', self.on_canvas_press)
-
-        # Connect the scroll_event signal to the callback function for zooming
-        # self.canvas.mpl_connect('scroll_event', self.on_canvas_scroll)
-
     def draw_graph(self):
         self.ax.clear()
         pos = nx.nx_agraph.graphviz_layout(self.call_graph, prog="dot")
         node_colors = ['red' if self.call_graph.nodes[node].get('traced') else 'blue' for node in self.call_graph.nodes()]
-        nx.draw_networkx(self.call_graph, pos, node_color=node_colors, ax=self.ax, with_labels=True, arrows=True)
+        nx.draw_networkx(self.call_graph, pos, node_color=node_colors, ax=self.ax, with_labels=False, arrows=True, alpha=0.5)
+        # labels = nx.get_node_attributes(self.call_graph, 'label')
+        nx.draw_networkx_labels(self.call_graph, pos, font_color='black', font_size=8, font_weight='bold', ax=self.ax)
         self.canvas.draw()
-
-"""
-    def on_canvas_press(self, event):
-        if event.button == 3:  # Right mouse button for panning
-            self.press_x = event.x
-            self.press_y = event.y
-
-    def on_canvas_scroll(self, event):
-        # Zoom using the mouse wheel
-        if event.button == 'up':
-            self.ax.set_xlim(self.ax.get_xlim()[0] - 0.1, self.ax.get_xlim()[1] + 0.1)
-            self.ax.set_ylim(self.ax.get_ylim()[0] - 0.1, self.ax.get_ylim()[1] + 0.1)
-        elif event.button == 'down':
-            self.ax.set_xlim(self.ax.get_xlim()[0] + 0.1, self.ax.get_xlim()[1] - 0.1)
-            self.ax.set_ylim(self.ax.get_ylim()[0] + 0.1, self.ax.get_ylim()[1] - 0.1)
-
-        self.canvas.draw()
-"""
