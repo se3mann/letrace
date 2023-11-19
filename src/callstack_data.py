@@ -21,7 +21,6 @@ class CallGraph:
             node = delete_offset(line)
             node_is_new = True
             if self.nx_graph.has_node(node):
-                print(f'Node {node} already exists')
                 node_is_new = False
             node = node
 
@@ -53,7 +52,6 @@ class CallGraph:
         traced_node = delete_offset(stack_list[0])
         self.parse_from_list(stack_list)
         self.nx_graph.nodes[traced_node]['traced'] = True
-        self.print_graph()
 
     def clear(self):
         self.nx_graph.clear()
