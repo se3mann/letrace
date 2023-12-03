@@ -60,5 +60,3 @@ class CallGraph:
 
     def get_nx_graph(self):
         return self.nx_graph
-
-
