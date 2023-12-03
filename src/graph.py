@@ -44,29 +44,14 @@ class GraphArea(Gtk.Box):
         self.toolbar = NavigationToolbar(self.canvas)
         self.append(self.toolbar)
 
-    def draw_node_boxes(self, pos):
-        for (node, label), (x, y) in zip(self.call_graph.nodes(data='label'), pos.values()):
+    def draw_node_boxes(self):
+        for (node, label), (x, y) in zip(self.call_graph.nodes(data='label'), self.pos.values()):
             if self.call_graph.nodes[node].get('traced'):
                 self.ax.text(x, y, label, color='black', fontsize=10, fontweight='bold', ha='center', va='center',
                              bbox=dict(facecolor='aqua', edgecolor='blue', boxstyle='round'))
             else:
                 self.ax.text(x, y, label, color='black', fontsize=10, fontweight='bold', ha='center', va='center',
                              bbox=dict(facecolor='lightskyblue', edgecolor='blue', boxstyle='round'))
-
-    def draw_graph(self):
-        self.ax.clear()
-        pos = nx.nx_agraph.graphviz_layout(self.call_graph, prog="dot")
-        nx.draw_networkx_edges(self.call_graph, self.pos, ax=self.ax, arrows=True, alpha=0.5)
-        self.draw_node_boxes(pos)
-        self.canvas.mpl_connect('button_press_event', self.on_canvas_click)
-        self.canvas.draw()
-
-    def get_clicked_node(self, x, y):
-        for node, (node_x, node_y) in self.pos.items():
-            distance = ((x - node_x) ** 2 + (y - node_y) ** 2) ** 0.5
-            if distance < 10:
-                return node
-        return None
 
     def on_canvas_click(self, event):
         # handle node click only if the toolbar is not active and left mouse button is pressed
@@ -78,3 +63,22 @@ class GraphArea(Gtk.Box):
             if clicked_node is not None:
                 node_attributes = self.call_graph.nodes[clicked_node]
                 dialog = NodeInfoDialog(clicked_node, node_attributes)
+
+    def get_clicked_node(self, x, y):
+        for node, (node_x, node_y) in self.pos.items():
+            distance = ((x - node_x) ** 2 + (y - node_y) ** 2) ** 0.5
+            if distance < 10:
+                return node
+        return None
+
+    def draw_graph(self):
+        self.ax.clear()
+        self.pos = nx.nx_agraph.graphviz_layout(self.call_graph, prog="dot")
+        nx.draw_networkx_edges(self.call_graph, self.pos, ax=self.ax, arrows=True, alpha=0.5)
+        self.draw_node_boxes()
+        self.canvas.mpl_connect('button_press_event', self.on_canvas_click)
+        self.canvas.draw()
+
+
+
+
