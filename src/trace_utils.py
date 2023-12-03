@@ -21,7 +21,6 @@ class Str(GObject.GObject):
 
 
 class TraceUtils:
-    # Gtk ListStore for kernel and user methods, data layer
     kernel_methods = Gio.ListStore.new(Str)
     user_methods = Gio.ListStore.new(Str)
     file = None
@@ -29,7 +28,6 @@ class TraceUtils:
     def __init__(self):
         pass
 
-    # Get the methods from kernel
     @classmethod
     def get_kernel_methods(cls):
         cmd = "pkexec bpftrace -l | grep -E '^kprobe' | cut -d ':' -f 2"
@@ -40,7 +38,6 @@ class TraceUtils:
             for line in output.splitlines():
                 cls.kernel_methods.append(Str(line.strip()))
 
-    # Get the methods from user file
     @classmethod
     def get_user_methods(cls, file):
         cmd = f"objdump -t {file}"
@@ -61,13 +58,11 @@ class TraceUtils:
                 cls.clear_user_methods()
                 cls.file = file
                 for i, line in enumerate(lines):
-                # The symbols marked with text are the functions
-                # in the source code
+                    # The symbols marked with text are the functions
+                    # in the source code
                     if ".text" in line:
                         cls.user_methods.append(Str(line.split()[-1]))
 
-    # If file param given, it will return the command for uprobe
-    # else it will return the command for kprobe
     @classmethod
     def get_start_trace_command(cls, function, file=None):
         if file is None:

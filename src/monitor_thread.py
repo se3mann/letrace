@@ -14,7 +14,6 @@ class MonitorThread(Thread):
         self.trace_thread.start()
         stack_lines = []
         while not self.stop_event.is_set():
-            # tracing not running due to error occurred
             if not self.trace_thread.is_alive():
                 print("Trace is stopped due to error occurred")
                 break
@@ -26,9 +25,7 @@ class MonitorThread(Thread):
                     # sometimes it creates an empty list
                     # because of double new line
                     if len(stack_lines) > 0:
-                        # print("--------------------")
                         self.callgraph.parse(stack_lines)
-                        # self.callgraph.print_edges()
                         stack_lines.clear()
                 else:
                     stack_lines.append(line)

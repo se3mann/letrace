@@ -1,11 +1,10 @@
 from subprocess import Popen, PIPE
-import shlex
 
 class Terminal:
     def __init__(self, *args, **kwargs):
         pass
 
-    # run terminal commands that are terminte by default
+    # run only terminal commands that are terminte by default
     @staticmethod
     def run_simple_command(cmd):
         with Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE) as p:

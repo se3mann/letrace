@@ -4,6 +4,7 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_gtk4agg import FigureCanvasGTK4Agg as FigureCanvas
 from matplotlib.backends.backend_gtk4 import NavigationToolbar2GTK4 as NavigationToolbar
 import networkx as nx
+import matplotlib.patches as patches
 
 
 class NodeInfoDialog(Gtk.Window):
@@ -29,8 +30,6 @@ class GraphArea(Gtk.Box):
         self.trace_controller = TraceControllerFactory.get_instance()
         self.call_graph = self.trace_controller.call_graph.get_nx_graph()
 
-
-        # set up figure and canvas
         self.figure = Figure(facecolor='lightskyblue')
         self.figure.tight_layout()
         self.figure.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05)
@@ -42,28 +41,36 @@ class GraphArea(Gtk.Box):
         self.ax = self.figure.add_subplot()
         self.show()
 
-        # Add NavigationToolbar
         self.toolbar = NavigationToolbar(self.canvas)
         self.append(self.toolbar)
 
+    def draw_node_boxes(self, pos):
+        for (node, label), (x, y) in zip(self.call_graph.nodes(data='label'), pos.values()):
+            if self.call_graph.nodes[node].get('traced'):
+                self.ax.text(x, y, label, color='black', fontsize=10, fontweight='bold', ha='center', va='center',
+                             bbox=dict(facecolor='aqua', edgecolor='blue', boxstyle='round'))
+            else:
+                self.ax.text(x, y, label, color='black', fontsize=10, fontweight='bold', ha='center', va='center',
+                             bbox=dict(facecolor='lightskyblue', edgecolor='blue', boxstyle='round'))
+
     def draw_graph(self):
         self.ax.clear()
-        self.pos = nx.nx_agraph.graphviz_layout(self.call_graph, prog="dot")
-        node_colors = ['red' if self.call_graph.nodes[node].get('traced') else 'blue' for node in self.call_graph.nodes()]
-        nx.draw_networkx(self.call_graph, self.pos, node_color=node_colors, ax=self.ax, with_labels=False, arrows=True, alpha=0.5)
-        nx.draw_networkx_labels(self.call_graph, self.pos, font_color='black', font_size=8, font_weight='bold', ax=self.ax)
+        pos = nx.nx_agraph.graphviz_layout(self.call_graph, prog="dot")
+        nx.draw_networkx_edges(self.call_graph, self.pos, ax=self.ax, arrows=True, alpha=0.5)
+        self.draw_node_boxes(pos)
         self.canvas.mpl_connect('button_press_event', self.on_canvas_click)
         self.canvas.draw()
 
     def get_clicked_node(self, x, y):
         for node, (node_x, node_y) in self.pos.items():
             distance = ((x - node_x) ** 2 + (y - node_y) ** 2) ** 0.5
-            if distance < 15:
+            if distance < 10:
                 return node
         return None
+
     def on_canvas_click(self, event):
+        # handle node click only if the toolbar is not active and left mouse button is pressed
         if not self.toolbar.mode and event.button == 1:
-            # Handle node click only if the toolbar is not active and left mouse button is pressed
             x, y = event.xdata, event.ydata
 
             clicked_node = self.get_clicked_node(x, y)
@@ -71,4 +78,3 @@ class GraphArea(Gtk.Box):
             if clicked_node is not None:
                 node_attributes = self.call_graph.nodes[clicked_node]
                 dialog = NodeInfoDialog(clicked_node, node_attributes)
-

@@ -31,7 +31,6 @@ class TraceSideBar(Gtk.Box):
         self.kernel_scrolled_window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self.user_scrolled_window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 
-        # self.set_kernel_list_on_thread()
         TraceUtils.get_kernel_methods()
         self.set_kernel_list_view()
 
@@ -49,7 +48,6 @@ class TraceSideBar(Gtk.Box):
         return self.sidebar_stack.get_visible_child_name()
 
     def set_kernel_list_view(self):
-        # setup for searching in listview
         self.filter_model_kernel.set_model(TraceUtils.kernel_methods)
         self.search_filter.set_filter_func(self.filter_func, self.filter_model_kernel)
         self.filter_model_kernel.set_filter(self.search_filter)
@@ -65,7 +63,6 @@ class TraceSideBar(Gtk.Box):
         self.methods_from_kernel.set_factory(factory)
 
     def set_user_list_view(self):
-        # setup for searching in listview
         self.filter_model_user.set_model(TraceUtils.user_methods)
         self.search_filter.set_filter_func(self.filter_func, self.filter_model_user)
         self.filter_model_user.set_filter(self.search_filter)
@@ -81,7 +78,6 @@ class TraceSideBar(Gtk.Box):
         self.methods_from_user.set_factory(factory)
 
     def filter_func(self, method, *args):
-        # Custom filter for method search.
         query = self.search_entry.get_text()
         if not query:
             return True
@@ -91,15 +87,6 @@ class TraceSideBar(Gtk.Box):
             return True
 
         return False
-
-    # Do it on thread to avoid blocking the UI
-    def set_kernel_list_on_thread(self):
-        def setup():
-            TraceUtils.get_kernel_methods()
-            self.set_kernel_list_view()
-
-        load_kernel_thread = threading.Thread(target=setup)
-        load_kernel_thread.start()
 
     def set_user_methods(self, file_path):
         TraceUtils.get_user_methods(file_path)
