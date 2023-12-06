@@ -2,3 +2,4 @@ pycairo
 PyGObject
 matplotlib
 networkx
+pygraphviz
