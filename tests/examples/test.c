@@ -1,61 +1,49 @@
- #include <time.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-void my_sleep(){
-    int milisec = 100; // length of time to sleep, in miliseconds
-    struct timespec req = {0};
-    req.tv_sec = 0;
-    req.tv_nsec = milisec * 1000000L;
-    nanosleep(&req, (struct timespec *)NULL);
+void functionA() {
+    printf("functionA\n");
+    sleepFunction();
+    functionB();
 }
 
-void func1(char * param1, char * param2)
-{
-    my_sleep();
-    printf("%s \n","In func1");
+void functionB() {
+    printf("functionB\n");
+    sleepFunction();
+    functionC();
+    functionD();
 }
 
-void func2(int param)
-{
-    my_sleep();
-    printf("%s \n","In func2");
+void functionC() {
+    printf("functionC\n");
+    sleepFunction();
+    functionE();
 }
 
-void func3()
-{
-    my_sleep();
-    printf("%s \n","In func3");
+void functionD() {
+    printf("functionD\n");
+    sleepFunction();
+    functionF();
 }
 
-void func4()
-{
-    printf("%s \n","In func4");
-    func2(3);
-    func3();
-    func3();
-    func3();
-    func3();
-    func3();
+void functionE() {
+    printf("functionE\n");
+    sleepFunction();
+    functionF();
+    functionD();
 }
 
-void func5()
-{
-    printf("%s \n","In func5");
-    func1("param1", "param2");
-    func1("param3", "param4");
+void functionF() {
+    printf("functionF\n");
+    sleepFunction();
 }
 
-void func6()
-{
-    printf("%s \n","In func6");
-    func4();
-    func5();
+void sleepFunction() {
+    usleep(200000); // Sleep for 0.2 seconds
 }
 
-int main(int argc, char * argv[])
-{
-    func6();
-    my_sleep();
-    return 0 ;
+int main() {
+    functionA();
+    return 0;
 }
-

@@ -1,49 +1,52 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
+#include <string.h>
 
-void functionA() {
-    printf("functionA\n");
-    sleepFunction();
-    functionB();
+const int SLEEP = 200000;
+
+void printHello() {
+    usleep(SLEEP);
+    printf("In printHello()\n");
+    printf("Hello, \n");
+    Add(5, 6);
+    printWorld();
 }
 
-void functionB() {
-    printf("functionB\n");
-    sleepFunction();
-    functionC();
-    functionD();
+void printWorld() {
+    usleep(SLEEP);
+    printf("In printWorld()\n");
+    printf("World!\n");
+    Multiply(5, 6);
 }
 
-void functionC() {
-    printf("functionC\n");
-    sleepFunction();
-    functionE();
+void Add(int a, int b) {
+    usleep(SLEEP);
+    printf("In Add()\n");
+    int sum = a + b;
+    printNumber(sum);
 }
 
-void functionD() {
-    printf("functionD\n");
-    sleepFunction();
-    functionF();
+void Multiply(int a, int b) {
+    usleep(SLEEP);
+    printf("In Multiply()\n");
+    int product = a * b;
+    Square(product);
 }
 
-void functionE() {
-    printf("functionE\n");
-    sleepFunction();
-    functionF();
-    functionD();
+void Square(int num) {
+    usleep(SLEEP);
+    printf("In Square()\n");
+    int square = num * num;
+    printNumber(square);
 }
 
-void functionF() {
-    printf("functionF\n");
-    sleepFunction();
-}
-
-void sleepFunction() {
-    usleep(200000); // Sleep for 0.2 seconds
+void printNumber(int num) {
+    usleep(SLEEP);
+    printf("In printNumber()\n");
+    printf("%d\n", num);
 }
 
 int main() {
-    functionA();
+    printHello();
     return 0;
 }
