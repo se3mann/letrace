@@ -1,5 +1,3 @@
-from threading import Thread
-
 from model.trace_thread import TraceThread
 from model.monitor_thread import MonitorThread
 from model.callstack_data import CallGraph

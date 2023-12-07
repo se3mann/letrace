@@ -1,7 +1,6 @@
 from gi.repository import Gtk
 from model.trace_controller import TraceController, TraceControllerFactory
 from controller.sidebar import TraceSideBar
-from model.trace_utils import TraceUtils
 from controller.graph import GraphArea
 
 

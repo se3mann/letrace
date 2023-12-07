@@ -2,13 +2,15 @@
 import sys
 import faulthandler
 import gi
+
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 from gi.repository import Gtk, Gio
 
-#from window import MainWindow
 from controller.window import MainWindow
+
 faulthandler.enable()
+
 
 class LeTraceApp(Gtk.Application):
     def __init__(self, **kwargs):
@@ -20,6 +22,7 @@ class LeTraceApp(Gtk.Application):
         if not win:
             win = MainWindow(application=self)
         win.present()
+
     def create_action(self, name, callback, shortcuts=None):
         action = Gio.SimpleAction.new(name, None)
         action.connect("activate", callback)

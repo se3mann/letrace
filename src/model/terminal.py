@@ -1,5 +1,6 @@
 from subprocess import Popen, PIPE
 
+
 class Terminal:
     def __init__(self, *args, **kwargs):
         pass

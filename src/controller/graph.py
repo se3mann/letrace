@@ -3,7 +3,6 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_gtk4agg import FigureCanvasGTK4Agg as FigureCanvas
 from matplotlib.backends.backend_gtk4 import NavigationToolbar2GTK4 as NavigationToolbar
 import networkx as nx
-import matplotlib.patches as patches
 
 from model.trace_controller import TraceController, TraceControllerFactory
 

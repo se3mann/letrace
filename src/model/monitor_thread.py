@@ -1,7 +1,4 @@
 from threading import Thread, Event
-from queue import Empty, Queue
-
-from model.trace_utils import TraceUtils
 
 
 class MonitorThread(Thread):

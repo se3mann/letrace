@@ -1,5 +1,4 @@
-from threading import Thread, Event
-from contextlib import redirect_stdout
+from threading import Thread
 from queue import Empty, Queue
 from subprocess import Popen, PIPE
 

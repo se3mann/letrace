@@ -1,5 +1,4 @@
 from gi.repository import Gtk
-import threading
 
 from model.trace_utils import TraceUtils, Str
 
